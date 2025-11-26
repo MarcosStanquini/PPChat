@@ -2,7 +2,7 @@
 .env
 
 # Data folder (sensitive data)
-DataIngestParsing/data/
+ingestion/data/
 
 # Python
 __pycache__/
