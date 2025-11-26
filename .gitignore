@@ -1,9 +1,6 @@
 # Environment variables
 .env
 
-# Data folder (sensitive data)
-ingestion/data/
-
 # Python
 __pycache__/
 *.py[cod]
