@@ -1,9 +1,7 @@
-from dotenv import load_dotenv
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from typing import List
 from langchain_core.documents import Document
 from langchain_community.document_loaders import PyMuPDFLoader
-import os
 
 class PdfProcessor:
     def __init__(self, chunk_size=100, chunk_overlap=20, min_clean_length=50):
@@ -14,7 +12,8 @@ class PdfProcessor:
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=self.chunk_size,
             chunk_overlap=self.chunk_overlap,
-            separators=[" "]
+            separators=["\n\n", "\n", ". ", "! ", "? ", "; ", ", ", " ", ""],
+            length_function=len,
         )
 
     def process_pdf(self, pdf_path:str) -> List[Document]:
@@ -49,23 +48,3 @@ class PdfProcessor:
         text = text.replace("ﬁ", "fi").replace("ﬂ", "fl")
         return text
 
-
-
-load_dotenv()
-file_path = os.getenv("FILE_PATH")
-print(f"Carregando PDF de: {file_path}")
-
-processor = PdfProcessor(
-    chunk_size=500,
-    chunk_overlap=50,
-    min_clean_length=50
-)
-
-chunks = processor.process_pdf(file_path)
-
-print(f"Total de chunks gerados: {len(chunks)}")
-
-for c in chunks[:3]: 
-    print("---")
-    print("Conteúdo:", c.page_content)
-    print("Metadata:", c.metadata)
