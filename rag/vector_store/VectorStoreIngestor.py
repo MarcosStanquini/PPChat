@@ -40,19 +40,16 @@ class VectorStoreIngestor:
         print(f"📄 Processando PDF: {pdf_path}")
         
         chunks = self.pdf_processor.process_pdf(pdf_path)
-        print(f"✅ Total de chunks gerados: {len(chunks)}")
-
+        print(f"Total de chunks gerados: {len(chunks)}")
         vectorstore = Chroma(
             collection_name=self.collection_name,
             embedding_function=self.embedding_function,
             persist_directory=self.persist_dir
         )
-        
-        print("💾 Armazenando chunks no ChromaDB...")
+        print("Armazenando chunks no ChromaDB...")
         vectorstore.add_documents(chunks)
         
-        print(f"✅ Ingestão concluída! Dados persistidos em: {self.persist_dir}")
-        
+        print("Ingestão concluída! Dados persistidos em: {self.persist_dir}")
         return vectorstore
     
     def load_vectorstore(self):
@@ -71,6 +68,10 @@ def main():
     
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Arquivo não encontrado: {file_path}")
+    
+    ingestor = VectorStoreIngestor()
+    ingestor.ingest_pdf(file_path)
+    print(f"✅ Documento ingerido com sucesso!")
     
 if __name__ == "__main__":
     main()
