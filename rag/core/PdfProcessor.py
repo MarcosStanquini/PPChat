@@ -13,12 +13,11 @@ class PdfProcessor:
             chunk_size=self.chunk_size,
             chunk_overlap=self.chunk_overlap,
             separators=["\n\n", "\n", ". ", "! ", "? ", "; ", ", ", " ", ""],
-            length_function=len,
         )
 
     def process_pdf(self, pdf_path:str) -> List[Document]:
         loader = PyMuPDFLoader(pdf_path)
-        pages=loader.load()
+        pages = loader.load()
         processed_chunks = []
 
         for page_num, page in enumerate(pages):
@@ -34,17 +33,16 @@ class PdfProcessor:
                 "char_count": len(cleaned_text)
             }
 
-
             chunks = self.text_splitter.create_documents(
-                texts = [cleaned_text],
-                metadatas = [metadata]
+                texts=[cleaned_text],
+                metadatas=[metadata]
             )
 
             processed_chunks.extend(chunks)
+
         return processed_chunks
         
     def _clean_text(self, text: str) -> str:
         text = " ".join(text.split())
         text = text.replace("ﬁ", "fi").replace("ﬂ", "fl")
         return text
-
