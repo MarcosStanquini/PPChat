@@ -1,13 +1,13 @@
 import os
 from langchain_chroma import Chroma
-from rag.core.PdfProcessor import PdfProcessor
 from langchain_huggingface import HuggingFaceEmbeddings
+from api.rag.core.PdfProcessor import PdfProcessor
 
 class VectorStoreIngestor:
     def __init__(
         self,
         embedding_model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
-        persist_dir: str = "rag/vector_store/db/chroma",
+        persist_dir: str = "apí/rag/vector_store/db/chroma",
         collection_name: str = "pdf_documents",
         chunk_size: int = 1000,
         chunk_overlap: int = 200,

@@ -1,5 +1,5 @@
-from rag.core.VectorStoreIngestor import VectorStoreIngestor
-from rag.service.AnsweringModel import AnsweringModel
+from api.rag.core.VectorStoreIngestor import VectorStoreIngestor
+from api.rag.service.AnsweringModel import AnsweringModel
 
 
 class RAGService:
@@ -13,8 +13,11 @@ class RAGService:
 
         answer = self.answering_model.answer(question, context)
 
+        print(context)
+        print(answer)
+
         return {
             "question": question,
-            "answer": answer,
+            "answer": answer,   
             "context_docs": docs
         }

@@ -1,6 +1,11 @@
 import os
 from dotenv import load_dotenv
-from core.VectorStoreIngestor import VectorStoreIngestor
+from api.rag.core.VectorStoreIngestor import VectorStoreIngestor
+from huggingface_hub import HfApi, login
+acess_token = os.getenv("ACESS_TOKEN")
+api = HfApi()
+login(acess_token)
+
 
 
 def main():
@@ -13,14 +18,14 @@ def main():
 
     ingestor = VectorStoreIngestor(
         embedding_model_name="sentence-transformers/all-MiniLM-L6-v2",
-        persist_dir="rag/vector_store/db/chroma",
+        persist_dir="api/rag/vector_store/db/chroma",
         collection_name="pdf_documents",
         chunk_size=1000,
         chunk_overlap=200,
         min_clean_length=100
     )
 
-    vectorstore.load_vectorstore()
+    vectorstore = ingestor.load_vectorstore()
     ###Quantidade de embeddings
     doc_count = vectorstore._collection.count()
     if doc_count == 0:
