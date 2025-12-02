@@ -12,13 +12,14 @@ class AnsweringModel:
         self.max_tokens = max_tokens
 
     def answer(self, question: str, context: str) -> str:
-        prompt = (
-            f"Responda de forma direta, objetiva e baseada EXCLUSIVAMENTE no contexto abaixo.\n"
-            f"Se o contexto não tiver a resposta, diga apenas: 'Não tenho informação suficiente.'\n\n"
-            f"Contexto:\n{context}\n\n"
-            f"Pergunta:\n{question}\n\n"
-            f"Resposta:"
-        )
+        prompt = f"""Com base no contexto abaixo, responda a pergunta de forma clara e objetiva.
+
+CONTEXTO:
+{context}
+
+PERGUNTA: {question}
+
+RESPOSTA:"""
 
 
         response = self.client.chat_completion(
