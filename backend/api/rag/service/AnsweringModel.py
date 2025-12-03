@@ -1,13 +1,20 @@
-from huggingface_hub import InferenceClient
+import boto3
+from botocore.config import Config
 
 class AnsweringModel:
     def __init__(
         self,
-        model_name="meta-llama/Meta-Llama-3-8B-Instruct",
+        model_id="anthropic.claude-3-5-sonnet-20241022-v2:0",
         temperature=0.3,
         max_tokens=600,
+        aws_region="us-east-1",
     ):
-        self.client = InferenceClient(model_name)
+        config = Config(
+            region_name=aws_region,
+            retries={"max_attempts": 3, "mode": "adaptive"}
+        )
+        self.client = boto3.client("bedrock-runtime", config=config)
+        self.model_id = model_id
         self.temperature = temperature
         self.max_tokens = max_tokens
 
@@ -21,11 +28,18 @@ PERGUNTA: {question}
 
 RESPOSTA:"""
 
-
-        response = self.client.chat_completion(
-            messages=[{"role": "user", "content": prompt}],
-            temperature=self.temperature,
-            max_tokens=self.max_tokens
+        response = self.client.converse(
+            modelId=self.model_id,
+            messages=[
+                {
+                    "role": "user",
+                    "content": [{"text": prompt}]
+                }
+            ],
+            inferenceConfig={
+                "temperature": self.temperature,
+                "maxTokens": self.max_tokens
+            }
         )
 
-        return response.choices[0].message.content
+        return response["output"]["message"]["content"][0]["text"]

@@ -13,9 +13,10 @@ class RAGService:
         )
         self.vectorstore = self.ingestor.load_vectorstore()
         self.answering_model = AnsweringModel(
-            model_name=settings.LLM_MODEL,
+            model_id=settings.BEDROCK_MODEL_ID,
             temperature=settings.LLM_TEMPERATURE,
-            max_tokens=settings.LLM_MAX_TOKENS
+            max_tokens=settings.LLM_MAX_TOKENS,
+            aws_region=settings.AWS_REGION
         )
 
     def ask(self, question: str):
